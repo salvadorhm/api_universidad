@@ -5,53 +5,52 @@ import json # json parser
 
 class Alumnos:
 
-    def __init__(self):
-        pass
+    def __init__(self): # Método inicial o constructor de la clase
+        pass # Simplemente continua con la ejecución
 
     '''
     http://localhost:8080/alumnos?action=get&token=1234
     '''
     def GET(self):
         try:
-            data = web.input()
-            if data['token'] == "1234":
-                if data['action'] == 'get':
-                    # call action_get()
-                    result = self.actionGet()
-                    return json.dumps(result)
+            data = web.input() # recibe los datos por la url
+            if data['token'] == "1234": # valida el token que se recibe por url
+                if data['action'] == 'get': # evalua la acción a realizar
+                    result = self.actionGet() # llama al metodo actionGet(), y almacena el resultado
+                    return json.dumps(result) # Parsea el diccionario result a formato json
                 else:
                     result = {} # crear diccionario vacio
                     result['status'] = "Command not found"
-                    return json.dumps(result) # Parsea el diccionario a json
+                    return json.dumps(result) # Parsea el diccionario result a formato json
             else:
                 result = {} # crear diccionario vacio
                 result['status'] = "Invalid Token"
-                return json.dumps(result)
+                return json.dumps(result) # Parsea el diccionario result a formato json
         except Exception as e:
             result = {} # crear diccionario vacio
             result['status'] = "Values missing, sintaxis: alumnos?action=get&token=XXXX"
-            return json.dumps(result)
+            return json.dumps(result) # Parsea el diccionario result a formato json
 
     @staticmethod
     def actionGet():
-        print("action_get init")
         try:
             result = {} # crear diccionario vacio
-            result['status'] = "200 Ok"
-            with open('static/csv/alumnos.csv','r') as csvfile:
+            result['status'] = "200 Ok" # mensaje de status
+            file = 'static/csv/alumnos.csv' # define el archivo donde se almacenan los datos
+            with open(file,'r') as csvfile: # abre el archivo en modo lectura
                 reader = csv.DictReader(csvfile) # toma la 1er fila para los nombres
-                alumnos = []
-                for row in reader:
-                    fila = {}
-                    fila['matricula']=(row['matricula'])
-                    fila['nombre']=(row['nombre'])
-                    fila['primer_apellido']=(row['primer_apellido'])
-                    fila['segundo_apellido']=(row['segundo_apellido'])
-                    fila['carrera']=(row['carrera'])
-                    alumnos.append(fila)
-                result['alumnos'] = alumnos
-            return result # Parsea el diccionario a json
+                alumnos = [] # array para almacenar todos los alumnos
+                for row in reader: # recorre el archivo CSV fila por fila
+                    fila = {} # Genera un diccionario por cada registro en el csv
+                    fila['matricula'] = row['matricula'] # optine la matricula y la agrega al diccionario
+                    fila['nombre'] = row['nombre'] # optione el nombre y lo agrega al diccionario
+                    fila['primer_apellido'] = row['primer_apellido'] # optiene el primer_apellido
+                    fila['segundo_apellido'] = row['segundo_apellido'] # optiene el segundo apellido
+                    fila['carrera'] = row['carrera'] # optiene la carrera
+                    alumnos.append(fila) # agrega el diccionario generado al array alumnos
+                result['alumnos'] = alumnos # agrega el array alumnos al diccionario result
+            return result # Regresa el diccionario generado
         except  Exception as e:
             result = {}
             result['status'] = "Error"
-            return result
+            return result # Regresa el diccionario generado
