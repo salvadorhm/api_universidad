@@ -10,6 +10,8 @@ ingrese a la URL: http://localhost:8080/alumnos?action=get&token=1234
 
 class Alumnos:
 
+    app_version = 0.01
+
     def __init__(self):  # Método inicial o constructor de la clase
         pass  # Simplemente continua con la ejecución
 
@@ -18,26 +20,30 @@ class Alumnos:
             data = web.input()  # recibe los datos por la url
             if data['token'] == "1234":  # valida el token que se recibe por url
                 if data['action'] == 'get':  # evalua la acción a realizar
-                    result = self.actionGet()  # llama al metodo actionGet(), y almacena el resultado
+                    result = self.actionGet(self.app_version)  # llama al metodo actionGet(), y almacena el resultado
                     return json.dumps(result)  # Parsea el diccionario result a formato json
                 else:
                     result = {}  # crear diccionario vacio
+                    result['app_version'] = self.app_version  # version de la webapp
                     result['status'] = "Command not found"
                     return json.dumps(result)  # Parsea el diccionario result a formato json
             else:
                 result = {}  # crear diccionario vacio
+                result['app_version'] = self.app_version  # version de la webapp
                 result['status'] = "Invalid Token"
                 return json.dumps(result)  # Parsea el diccionario result a formato json
         except Exception as e:
-            print("Error {}".format(e.args()))
+            print("Error")
             result = {}  # crear diccionario vacio
+            result['app_version'] = self.app_version  # version de la webapp
             result['status'] = "Values missing, sintaxis: alumnos?action=get&token=XXXX"
             return json.dumps(result)  # Parsea el diccionario result a formato json
 
     @staticmethod
-    def actionGet():
+    def actionGet(app_version):
         try:
             result = {}  # crear diccionario vacio
+            result['app_version'] = app_version  # version de la webapp
             result['status'] = "200 ok"  # mensaje de status
             file = 'static/csv/alumnos.csv'  # define el archivo donde se almacenan los datos
             with open(file, 'r') as csvfile:  # abre el archivo en modo lectura
@@ -56,5 +62,6 @@ class Alumnos:
         except Exception as e:
             result = {}
             print("Error {}".format(e.args()))
+            result['app_version'] = app_version  # version de la webapp
             result['status'] = "Error "
             return result  # Regresa el diccionario generado
