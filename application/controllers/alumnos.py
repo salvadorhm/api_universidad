@@ -38,7 +38,7 @@ class Alumnos:
     def actionGet():
         try:
             result = {}  # crear diccionario vacio
-            result['status'] = "200"  # mensaje de status
+            result['status'] = "200 ok"  # mensaje de status
             file = 'static/csv/alumnos.csv'  # define el archivo donde se almacenan los datos
             with open(file, 'r') as csvfile:  # abre el archivo en modo lectura
                 reader = csv.DictReader(csvfile)  # toma la 1er fila para los nombres
