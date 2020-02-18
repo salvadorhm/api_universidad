@@ -10,7 +10,8 @@ import json  # json parser
 
 class Alumnos:
 
-    app_version = "0.01"
+    app_version = "0.02"  # version de la webapp
+    file = 'static/csv/alumnos.csv'  # define el archivo donde se almacenan los datos
 
     def __init__(self):  # Método inicial o constructor de la clase
         pass  # Simplemente continua con la ejecución
@@ -20,7 +21,7 @@ class Alumnos:
             data = web.input()  # recibe los datos por la url
             if data['token'] == "1234":  # valida el token que se recibe por url
                 if data['action'] == 'get':  # evalua la acción a realizar
-                    result = self.actionGet(self.app_version)  # llama al metodo actionGet(), y almacena el resultado
+                    result = self.actionGet(self.app_version, self.file)  # llama al metodo actionGet(), y almacena el resultado
                     return json.dumps(result)  # Parsea el diccionario result a formato json
                 else:
                     result = {}  # crear diccionario vacio
@@ -40,12 +41,12 @@ class Alumnos:
             return json.dumps(result)  # Parsea el diccionario result a formato json
 
     @staticmethod
-    def actionGet(app_version):
+    def actionGet(app_version, file):
         try:
             result = {}  # crear diccionario vacio
             result['app_version'] = app_version  # version de la webapp
             result['status'] = "200 ok"  # mensaje de status
-            file = 'static/csv/alumnos.csv'  # define el archivo donde se almacenan los datos
+            
             with open(file, 'r') as csvfile:  # abre el archivo en modo lectura
                 reader = csv.DictReader(csvfile)  # toma la 1er fila para los nombres
                 alumnos = []  # array para almacenar todos los alumnos
@@ -60,8 +61,8 @@ class Alumnos:
                 result['alumnos'] = alumnos  # agrega el array alumnos al diccionario result
             return result  # Regresa el diccionario generado
         except Exception as e:
-            result = {}
+            result = {}  # crear diccionario vacio
             print("Error {}".format(e.args()))
             result['app_version'] = app_version  # version de la webapp
-            result['status'] = "Error "
+            result['status'] = "Error "  # mensaje de status
             return result  # Regresa el diccionario generado
