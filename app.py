@@ -1,4 +1,4 @@
-import web # pip install web.py
+import web  # pip install web.py
 
 urls = (
     '/alumnos/?', 'application.controllers.alumnos.Alumnos',
