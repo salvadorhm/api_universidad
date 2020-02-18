@@ -3,14 +3,15 @@ import app # app.py
 import csv # CSV parser
 import json # json parser
 
+'''
+Controller Alumnos que es invocado cuando el usuario
+ingrese a la URL: http://localhost:8080/alumnos?action=get&token=1234
+'''
 class Alumnos:
 
     def __init__(self): # Método inicial o constructor de la clase
         pass # Simplemente continua con la ejecución
 
-    '''
-    http://localhost:8080/alumnos?action=get&token=1234
-    '''
     def GET(self):
         try:
             data = web.input() # recibe los datos por la url
